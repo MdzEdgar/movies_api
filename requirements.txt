@@ -1,0 +1,5 @@
+fastapi==0.109.0
+mysqlclient==2.2.1
+peewee==3.17.0
+python-decouple==3.8
+uvicorn==0.27.0.post1
