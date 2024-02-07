@@ -1,4 +1,17 @@
+from typing import Any
 from pydantic import BaseModel, validator
+from pydantic.utils import GetterDict
+from peewee import ModelSelect
+
+
+class PeeweeGetterDict(GetterDict):
+    def get(self, key: Any, default: Any = None):
+        res = getattr(self._obj, key, default)
+
+        if isinstance(res, ModelSelect):
+            return list(res)
+
+        return res
 
 
 class UserRequestBaseModel(BaseModel):
@@ -16,3 +29,7 @@ class UserRequestBaseModel(BaseModel):
 class UserResponseModel(BaseModel):
     id: int
     username: str
+
+    class Config:
+        orm_mode = True
+        getter_dict = PeeweeGetterDict
