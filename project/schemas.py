@@ -14,6 +14,12 @@ class PeeweeGetterDict(GetterDict):
         return res
 
 
+class ResponseModel(BaseModel):
+    class Config:
+        orm_mode = True
+        getter_dict = PeeweeGetterDict
+
+
 class UserRequestBaseModel(BaseModel):
     username: str
     password: str
@@ -26,10 +32,20 @@ class UserRequestBaseModel(BaseModel):
         return username
 
 
-class UserResponseModel(BaseModel):
+class UserResponseModel(ResponseModel):
     id: int
     username: str
 
-    class Config:
-        orm_mode = True
-        getter_dict = PeeweeGetterDict
+
+class ReviewRequestModel(BaseModel):
+    user_id: int
+    movie_id: int
+    review: str
+    score: int
+
+
+class ReviewResponseModel(ResponseModel):
+    id: int
+    movie_id: int
+    review: str
+    score: int
