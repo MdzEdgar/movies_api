@@ -2,7 +2,8 @@ from typing import List
 from fastapi import FastAPI, HTTPException
 from database import database as connection
 from database import User, Movie, UserReview
-from schemas import UserRequestBaseModel, UserResponseModel, ReviewRequestModel,ReviewResponseModel
+from schemas import (UserRequestBaseModel, UserResponseModel, ReviewRequestModel, ReviewResponseModel,
+                     ReviewRequestPutModel)
 
 app = FastAPI(title='Proyecto para reseñar peliculas',
               description='En este proyecto se usara para crear reseñas de peliculas.',
@@ -77,5 +78,20 @@ async def get_review(review_id: int):
 
     if user_review is None:
         raise HTTPException(status_code=404, detail='Review not found.')
+
+    return user_review
+
+
+@app.put('/reviews/{review_id}', response_model=ReviewResponseModel)
+async def update_review(review_id: int, review_request: ReviewRequestPutModel):
+    user_review = UserReview.select().where(UserReview.id == review_id).first()
+
+    if user_review is None:
+        raise HTTPException(status_code=404, detail='Review not found.')
+
+    user_review.review = review_request.review
+    user_review.score = review_request.score
+
+    user_review.save()
 
     return user_review
