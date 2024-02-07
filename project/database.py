@@ -1,6 +1,7 @@
 from peewee import *
 from decouple import config
 from datetime import datetime
+import hashlib
 
 DATABASE = config('DB_NAME')
 
@@ -22,6 +23,13 @@ class User(Model):
     class Meta:
         database = database
         table_name = 'users'
+
+    @classmethod
+    def create_password(cls, password):
+        h = hashlib.md5()
+
+        h.update(password.encode('utf-8'))
+        return h.hexdigest()
 
 
 class Movie(Model):
