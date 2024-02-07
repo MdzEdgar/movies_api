@@ -66,4 +66,5 @@ async def create_review(user_review: ReviewRequestModel):
 async def get_reviews():
     reviews = UserReview.select()
 
-    return reviews
+    # return reviews
+    return [user_review for user_review in reviews]
