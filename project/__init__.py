@@ -2,12 +2,16 @@ from typing import List
 from fastapi import FastAPI, HTTPException
 from .database import database as connection
 from .database import User, Movie, UserReview
+from .routers import user_router
 from .schemas import (UserRequestBaseModel, UserResponseModel, ReviewRequestModel, ReviewResponseModel,
                       ReviewRequestPutModel)
 
 app = FastAPI(title='Proyecto para reseñar peliculas',
               description='En este proyecto se usara para crear reseñas de peliculas.',
               version='1')
+
+
+app.include_router(user_router)
 
 
 @app.on_event('startup')
@@ -27,21 +31,6 @@ def shutdown():
 @app.get('/')
 async def index():
     return 'Hola mundo desde un servidor en FastAPI'
-
-
-@app.post('/users', response_model=UserResponseModel)
-async def create_user(user: UserRequestBaseModel):
-    if User.select().where(User.username == user.username).exists():
-        return HTTPException(409, 'El username ya se encuentra en uso.')
-
-    hash_password = User.create_password(user.password)
-
-    user = User.create(
-        username=user.username,
-        password=hash_password
-    )
-
-    return user
 
 
 @app.post('/reviews', response_model=ReviewResponseModel)
