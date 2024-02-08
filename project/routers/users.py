@@ -2,7 +2,7 @@ from fastapi import HTTPException, APIRouter
 from ..database import User
 from ..schemas import UserResponseModel, UserRequestBaseModel
 
-router = APIRouter(prefix='/api/v1/users')
+router = APIRouter(prefix='/users')
 
 
 @router.post('', response_model=UserResponseModel)
