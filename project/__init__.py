@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import FastAPI, HTTPException
-from database import database as connection
-from database import User, Movie, UserReview
-from schemas import (UserRequestBaseModel, UserResponseModel, ReviewRequestModel, ReviewResponseModel,
-                     ReviewRequestPutModel)
+from .database import database as connection
+from .database import User, Movie, UserReview
+from .schemas import (UserRequestBaseModel, UserResponseModel, ReviewRequestModel, ReviewResponseModel,
+                      ReviewRequestPutModel)
 
 app = FastAPI(title='Proyecto para reseñar peliculas',
               description='En este proyecto se usara para crear reseñas de peliculas.',
@@ -31,7 +31,6 @@ async def index():
 
 @app.post('/users', response_model=UserResponseModel)
 async def create_user(user: UserRequestBaseModel):
-
     if User.select().where(User.username == user.username).exists():
         return HTTPException(409, 'El username ya se encuentra en uso.')
 
@@ -73,7 +72,6 @@ async def get_reviews(page: int = 1, limit: int = 10):
 
 @app.get('/reviews/{review_id}', response_model=ReviewResponseModel)
 async def get_review(review_id: int):
-
     user_review = UserReview.select().where(UserReview.id == review_id).first()
 
     if user_review is None:
