@@ -1,17 +1,12 @@
 import requests
 
-URL = 'http://localhost:8000/api/v1/reviews'
-REVIEW = {
-    'user_id': 1,
-    'movie_id': 1,
-    'review': 'Review creada con request',
-    'score': 3
-}
+REVIEW_ID = 4
+URL = f'http://localhost:8000/api/v1/reviews/{REVIEW_ID}'
 
-response = requests.post(URL, json=REVIEW)
+response = requests.delete(URL)
 
 if response.status_code == 200:
-    print('Reseña creada de forma exitosa.')
-    print(response.json()['id'])
+    print('La reseña se elimino')
+    print(response.json())
 else:
     print(response.content)
