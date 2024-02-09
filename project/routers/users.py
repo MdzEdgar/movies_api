@@ -37,9 +37,6 @@ async def login(credentials: HTTPBasicCredentials, response: Response):
     return user
 
 
-@router.get('/reviews')
+@router.get('/reviews', response_model=List[ReviewResponseModel])
 async def get_reviews(user: User = Depends(get_current_user)):
-    return {
-        'id': user.id,
-        'username': user.username
-    }
+    return [user_review for user_review in user.reviews]
