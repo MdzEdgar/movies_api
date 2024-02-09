@@ -3,7 +3,7 @@ from fastapi import HTTPException, APIRouter, Response, Depends
 from fastapi.security import HTTPBasicCredentials
 from ..database import User
 from ..schemas import UserResponseModel, UserRequestBaseModel, ReviewResponseModel
-from ..common import oauth2_schema
+from ..common import get_current_user
 
 router = APIRouter(prefix='/users')
 
@@ -38,7 +38,8 @@ async def login(credentials: HTTPBasicCredentials, response: Response):
 
 
 @router.get('/reviews')
-async def get_reviews(token: str = Depends(oauth2_schema)):
+async def get_reviews(user: User = Depends(get_current_user)):
     return {
-        'token': token
+        'id': user.id,
+        'username': user.username
     }
